@@ -39,63 +39,62 @@ To submit your homework:
   * Submit a link to your Session03 fork repository!
 """
 
+import re
+from functools import reduce
+
 def add(*args):
-    """ Returns a STRING with the sum of the arguments """
-
-    # TODO: Fill sum with the correct value, based on the
-    # args provided.
-
-    list = args
-    add_result = list[0]
-    for i in list[1:]:
-      add_result = add_result + i
-    return str(add_result)
-
-# TODO: Add functions for handling more arithmetic operations.
+    adding = reduce((lambda x, y: x + y), [int(i) for i in args])
+    return str(adding)
 
 def subtract(*args):
-
-    list = args
-    subtract_result = list[0]
-    for i in list[1:]:
-      subtract_result = subtract_result - i
-    return str(subtract_result)
+    subtracting = reduce((lambda x, y: x - y), [int(i) for i in args])
+    return str(subtracting)
 
 def multiply(*args):
-
-    list = args
-    multiply_result = list[0]
-    for i in list[1:]:
-      multiply_result = multiply_result - i
-    return str(multiply_result)
+    multiplying = reduce((lambda x, y: x * y), [int(i) for i in args])
+    return str(multiplying)
 
 def divide(*args):
+    dividing = reduce((lambda x, y: x / y), [int(i) for i in args])
+    return str(dividing)
 
-    list = args
-    divide_result = list[0]
-    for i in list[1:]:
-      divide_result = divide_result - i
-    return str(divide_result)
 
+def how_to(*args):
+
+  return  """<html>
+    <head><strong>Lesson 4 Assignment: WSGI Calculator</strong></head>
+    <p><strong>How-Tos:</strong></p>
+    <p><strong>Copying and pasting the following URL by the specific math opetation</strong></p>
+    <ol>
+      <li><strong>Addition:</strong> http://localhost:8080/add/23/42</li>
+      <li><strong>Subtraction:</strong> http://localhost:8080/subtract/23/42</li>
+      <li><strong>Multiplication:</strong> http://localhost:8080/multiply/3/5</li>
+      <li><strong>Division:</strong> http://localhost:8080/divide/22/11</li>
+    </ol>
+    </html>
+    """
 
 def resolve_path(path):
-    """
-    Should return two values: a callable and an iterable of
-    arguments.
-    """
 
-    # TODO: Provide correct values for func and args. The
-    # examples provide the correct *syntax*, but you should
-    # determine the actual values of func and args using the
-    # path.
+    # Vamsi's sample code.
 
-    # example: path = http://localhost:8080/add/23/42
+    funcs = {
 
-    full = path.strip("/").split("/")
-    func = full[0] # func =  "add"
-    args = full[4:] # args = ["22", "42"]
+      '': how_to,
+      'add': add,
+      'subtract': subtract,
+      'multiply': multiply,
+      'divide': divide,
+    }
 
-    return func, args
+
+    path = path.strip('/').split('/')
+
+    func = funcs[path[0]]
+
+    args = path[1:]
+
+    return func, args    
 
 
 def application(environ, start_response):
